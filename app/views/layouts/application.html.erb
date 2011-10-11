@@ -8,6 +8,22 @@
 </head>
 <body>
 
+  <div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container">
+          <h3><a href="#">Medvane Genes</a></h3>
+          <ul class="nav">
+            <li class="active"><%= link_to "Home", root_url %></li>
+          </ul>
+          <form action="">
+            <input type="text" placeholder="Search" />
+          </form>
+        </div>
+      </div><!-- /topbar-inner -->
+    </div><!-- /topbar -->
+  </div><!-- /topbar-wrapper -->
+
 <%= yield %>
 
 </body>
