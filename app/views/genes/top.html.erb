@@ -1,5 +1,5 @@
 <% if @genes.size > 0 %>
-  <table class="zebra-striped">
+  <table id="genes" class="zebra-striped">
     <thead>
       <tr>
         <th>Symbol</th>
@@ -7,6 +7,7 @@
         <th>Name</th>
         <th>Chromosome</th>
         <th>Map Location</th>
+        <th>Odds Ratio</th>
         <th>Articles &#9662;</th>
       </tr>
     </thead>
@@ -18,6 +19,7 @@
         <td><%= g.name %></td>
         <td><%= g.chromosome %></td>
         <td><%= g.map_location %></td>
+        <td></td>
         <td class="number"><%= number_with_delimiter(g.matched_articles_count) %> <%= pubmed_links(g.id, @term) %></td>
       </tr>
   <% end %>
