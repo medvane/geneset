@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20110911005737) do
     t.text   "title"
     t.string "source"
     t.date   "pubdate"
+    t.text   "abstract"
   end
 
   create_table "gene_subjects", :force => true do |t|

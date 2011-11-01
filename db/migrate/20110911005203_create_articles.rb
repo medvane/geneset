@@ -4,6 +4,7 @@ class CreateArticles < ActiveRecord::Migration
       t.text :title
       t.string :source
       t.date :pubdate
+      t.text :abstract
     end
   end
 end

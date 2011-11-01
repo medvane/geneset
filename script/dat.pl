@@ -236,8 +236,9 @@ sub do_medline {
       my $ti = $rec->{TI}->[0] || "[No title available]";
       my $dp = $rec->{DP}->[0]; $dp =~ s/^(\d{4}).+$/$1/g;
       my $so = $rec->{SO}->[0] || $rec->{BTI}->[0];
+      my $ab = $rec->{AB}->[0] || "[No abstract available]";
       if ($pmid && $ti && $so && $dp) {
-        print AR join("\t", $pmid, $ti, $so, $dp), "\n";
+        print AR join("\t", $pmid, $ti, $so, $dp, $ab), "\n";
       } else {
         print STDERR "ERROR [$pmid|$ti|$so|$dp][$record]\n" 
       }
