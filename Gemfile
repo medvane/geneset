@@ -21,6 +21,7 @@ gem 'jquery-rails'
 gem 'meshcomplete'
 gem 'libxml-ruby'
 gem 'eutils'
+gem 'loadat'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
