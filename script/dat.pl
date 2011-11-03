@@ -23,6 +23,8 @@ download(@source);
 
 my ($article_ids, $gene_ids, $tax_ids) = do_gene2pubmed();
 do_taxonomy($tax_ids);
+print STDERR "STOP================";
+my $tmp = <STDIN>; 
 do_gene_info($gene_ids);
 my ($subject_ids, $ancestor_ids) = do_dbin($year);
 download_medline($article_ids);
@@ -59,7 +61,8 @@ sub do_gene2pubmed {
     print AG join("\t", ++$article_gene_id, $article_id, $gene_id), "\n";
     ++$article_id{$article_id}->{$gene_id};
     ++$gene_id{$gene_id};
-    ++$tax_id{$tax_id}->{$gene_id};
+    ++$tax_id{$tax_id}->{gene}->{$gene_id};
+    ++$tax_id{$tax_id}->{article}->{$article_id};
   }
   print STDERR $article_gene_id, "\n";
   print STDERR "ARTICLE: ", scalar(keys %article_id), "\n";
@@ -109,8 +112,9 @@ sub do_taxonomy {
     open(OH, "> tmp/taxonomies.dat") or die("Can't write tmp/taxonomies.dat: $!\n");
     foreach my $tax_id (sort { $a <=> $b } keys %taxonomy) {
       my $name = $taxonomy{$tax_id}->{"genbank common name"} || $taxonomy{$tax_id}->{"scientific name"};
-      my $genes_count = scalar(keys %{ $tax_ids->{$tax_id} });
-      print OH join("\t", $tax_id, $name, $genes_count), "\n";
+      my $genes_count = scalar(keys %{ $tax_ids->{$tax_id}->{gene} });
+      my $articles_count = scalar(keys %{ $tax_ids->{$tax_id}->{article} });
+      print OH join("\t", $tax_id, $name, $genes_count, $articles_count), "\n";
       ++$count;
     }
     close OH;
