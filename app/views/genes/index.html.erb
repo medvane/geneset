@@ -1,23 +1,33 @@
 <h1>Genes</h1>
 
-<table>
-  <tr>
-    <th>Taxonomy</th>
-    <th>Symbol</th>
-    <th>Name</th>
-    <th>Chromosome</th>
-    <th>Map location</th>
-    <th>Articles count</th>
-  </tr>
-
-<% @genes.each do |gene| %>
-  <tr>
-    <td><%= gene.taxonomy_id %></td>
-    <td><%= gene.symbol %></td>
-    <td><%= gene.name %></td>
-    <td><%= gene.chromosome %></td>
-    <td><%= gene.map_location %></td>
-    <td><%= gene.articles_count %></td>
-  </tr>
+<ul class="tabs">
+  <li class="<%= @taxonomy_id.blank? ? "active" : "" %>"><%= link_to("All species", genes_path) %></li>
+<% Taxonomy.order("articles_count desc").limit(5).each do |taxonomy| %>
+  <li class="<%= taxonomy.id == @taxonomy_id.to_i ? "active" : "" %>"><%= link_to(taxonomy.name, genes_path(:taxonomy_id => taxonomy.id))%></li>
 <% end %>
+</ul>
+
+<table class="zebra-striped">
+  <thead>
+    <tr>
+      <th>Species</th>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>Chromosome</th>
+      <th>Map location</th>
+      <th class="number">Articles</th>
+    </tr>
+  </thead>
+  <tbody>
+<% @genes.each do |gene| %>
+    <tr>
+      <td><%= gene.taxonomy.name %></td>
+      <td><%= link_to(gene.symbol, gene) %></td>
+      <td><%= link_to(gene.name, gene) %></td>
+      <td><%= gene.chromosome %></td>
+      <td><%= gene.map_location %></td>
+      <td class="number"><%= number_with_delimiter(gene.articles_count) %></td>
+    </tr>
+<% end %>
+  </tbody>
 </table>

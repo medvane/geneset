@@ -1,7 +1,8 @@
 class GenesController < ApplicationController
   def index
-    @genes = Gene.limit(10)
-
+    @genes = Gene.order("articles_count desc").limit(30).includes(:taxonomy)
+    @taxonomy_id = params[:taxonomy_id]
+    @genes = @genes.where(:taxonomy_id => @taxonomy_id) if @taxonomy_id.present?
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @genes }
