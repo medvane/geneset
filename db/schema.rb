@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20110911005737) do
     t.integer "taxonomy_id"
     t.string  "symbol"
     t.string  "name"
+    t.text    "synonyms"
     t.string  "chromosome"
     t.string  "map_location"
     t.integer "articles_count", :default => 0

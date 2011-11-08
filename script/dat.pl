@@ -26,6 +26,7 @@ download(@source);
 my ($article_ids, $gene_ids, $tax_ids) = do_gene2pubmed();
 do_taxonomy($tax_ids);
 do_gene_info($gene_ids);
+print STDERR "gene done"; my $tmp = <STDIN>;
 my ($subject_ids, $ancestor_ids) = do_dbin($year);
 download_medline($article_ids);
 do_medline();
@@ -84,7 +85,7 @@ sub do_gene_info {
       chomp;
       my ($taxonomy_id, $gene_id, $symbol, $locus_tag, $synonyms, $dbXrefs, $chromosome, $map_location, $description, $type_of_gene, $symbol_from_nomenclature_authority, $full_name_from_nomenclature_authority, $nomenclature_status, $other_designations, $modification_date) = split /\t/;
       if ($gene_ids->{$gene_id}) {
-        print GE join("\t", $gene_id, $taxonomy_id, $symbol, $description, $chromosome, $map_location, $gene_ids->{$gene_id}), "\n";
+        print GE join("\t", $gene_id, $taxonomy_id, $symbol, $description, $synonyms, $chromosome, $map_location, $gene_ids->{$gene_id}), "\n";
       }
     }
     print STDERR "done\n";

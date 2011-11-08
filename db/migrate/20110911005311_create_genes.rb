@@ -4,6 +4,7 @@ class CreateGenes < ActiveRecord::Migration
       t.integer :taxonomy_id
       t.string :symbol
       t.string :name
+      t.text :synonyms
       t.string :chromosome
       t.string :map_location
       t.integer :articles_count, :default => 0
