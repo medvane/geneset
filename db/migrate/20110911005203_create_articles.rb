@@ -3,8 +3,9 @@ class CreateArticles < ActiveRecord::Migration
     create_table :articles do |t|
       t.text :title
       t.string :source
-      t.date :pubdate
+      t.integer :pubyear, :limit => 2
       t.text :abstract
     end
+    add_index :articles, :pubyear
   end
 end

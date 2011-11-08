@@ -30,11 +30,13 @@ ActiveRecord::Schema.define(:version => 20110911005737) do
   add_index "article_subjects", ["subject_id", "article_id"], :name => "index_article_subjects_on_subject_id_and_article_id", :unique => true
 
   create_table "articles", :force => true do |t|
-    t.text   "title"
-    t.string "source"
-    t.date   "pubdate"
-    t.text   "abstract"
+    t.text    "title"
+    t.string  "source"
+    t.integer "pubyear",  :limit => 2
+    t.text    "abstract"
   end
+
+  add_index "articles", ["pubyear"], :name => "index_articles_on_pubyear"
 
   create_table "gene_subjects", :force => true do |t|
     t.integer "gene_id"
