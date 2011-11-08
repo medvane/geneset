@@ -1,6 +1,6 @@
 class GenesController < ApplicationController
   def index
-    @genes = Gene.order("articles_count desc").limit(30).includes(:taxonomy)
+    @genes = Gene.order("articles_count desc").paginate(:page => params[:page], :per_page => 15).includes(:taxonomy)
     @taxonomy_id = params[:taxonomy_id]
     @genes = @genes.where(:taxonomy_id => @taxonomy_id) if @taxonomy_id.present?
     respond_to do |format|
