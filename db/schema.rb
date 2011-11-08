@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20110911005737) do
   end
 
   add_index "article_genes", ["article_id", "gene_id"], :name => "index_article_genes_on_article_id_and_gene_id", :unique => true
+  add_index "article_genes", ["gene_id", "article_id"], :name => "index_article_genes_on_gene_id_and_article_id", :unique => true
 
   create_table "article_subjects", :force => true do |t|
     t.integer "article_id"
@@ -73,9 +74,11 @@ ActiveRecord::Schema.define(:version => 20110911005737) do
 
   create_table "taxonomies", :force => true do |t|
     t.string  "name"
-    t.integer "genes_count", :default => 0
+    t.integer "genes_count",    :default => 0
+    t.integer "articles_count", :default => 0
   end
 
+  add_index "taxonomies", ["articles_count"], :name => "index_taxonomies_on_articles_count"
   add_index "taxonomies", ["genes_count"], :name => "index_taxonomies_on_genes_count"
 
 end
