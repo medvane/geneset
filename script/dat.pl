@@ -19,12 +19,13 @@ my @source = (
   "ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz"
 );
 
+my %month = ("Jan", 1, "Feb", 2, "Mar", 3, "Apr", 4, "May", 5, "Jun", 6, "Jul", 7, "Aug", 8, "Sep", 9, "Oct", 10, "Nov", 11, "Dec", 12, "Spring", 3, "Summer", 6, "Fall", 9, "Winter", 12);
+
+print STDERR join("\n", map { join("\t", $_, $month{$_}) } sort keys %month), "\n";
 download(@source);
 
 my ($article_ids, $gene_ids, $tax_ids) = do_gene2pubmed();
 do_taxonomy($tax_ids);
-print STDERR "STOP================";
-my $tmp = <STDIN>; 
 do_gene_info($gene_ids);
 my ($subject_ids, $ancestor_ids) = do_dbin($year);
 download_medline($article_ids);
@@ -142,6 +143,7 @@ sub do_dbin {
           print EN join("\t", ++$mesh_entry_term_id, $subject_id, $i), "\n";
         }
         $subject_id{$term} = $subject_id;
+        $subject_id{lc($term)} = $subject_id;
       }
       foreach my $t (@tree_number) {
         $tree2subject_id{$t} = $subject_id;
@@ -238,7 +240,7 @@ sub do_medline {
       my $rec = parse_medline($_);
       my $pmid = $rec->{PMID}->[0];
       my $ti = $rec->{TI}->[0] || "[No title available]";
-      my $dp = $rec->{DP}->[0]; $dp =~ s/^(\d{4}).+$/$1/g;
+      my $dp = $rec->{DP}->[0]; $dp =~ s/^(\d{4}).*$/$1/;
       my $so = $rec->{SO}->[0] || $rec->{BTI}->[0];
       my $ab = $rec->{AB}->[0] || "[No abstract available]";
       if ($pmid && $ti && $so && $dp) {
@@ -324,7 +326,7 @@ sub subject_id {
   my @majr = map { s/\/.+$//g; s/\*//g; $_ } grep { /\*/ } @$subjects;
   my %subject_id;
   foreach my $m (@majr) {
-    my $subject_id = $subject_ids->{$m};
+    my $subject_id = $subject_ids->{$m} || $subject_ids->{lc($m)};
     if ($subject_id) {
       ++$subject_id{$subject_id};
       my @ancestor_id = keys %{ $ancestor_ids->{$subject_id} };
@@ -337,4 +339,23 @@ sub subject_id {
   }
   my @subject_id = sort { $a <=> $b } keys %subject_id;
   return @subject_id;
+}
+
+sub pubdate {
+  my $dp = shift;
+  my ($year, $month, $day) = (0, 1, 1);
+  if ($dp =~ /^(\d{4})(.+)?$/) {
+    $year = $1;
+    if ($2) {
+      my $month_day = $2;
+      $month_day =~ s/^[\s-]+//g;
+      my ($month_str, @day) = split /[ -]/, $month_day;
+      $month = $month{$month_str} || 1;
+      if ($#day >= 0 && $day[0] =~ /^\d+$/ && $day[0] <= 31) {
+        $day = $day[0];
+      }
+    }
+  }
+  my $pubdate = sprintf("%04d-%02d-%02d", $year, $month, $day);
+  return $pubdate;
 }
