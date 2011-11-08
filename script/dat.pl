@@ -21,7 +21,6 @@ my @source = (
 
 my %month = ("Jan", 1, "Feb", 2, "Mar", 3, "Apr", 4, "May", 5, "Jun", 6, "Jul", 7, "Aug", 8, "Sep", 9, "Oct", 10, "Nov", 11, "Dec", 12, "Spring", 3, "Summer", 6, "Fall", 9, "Winter", 12);
 
-print STDERR join("\n", map { join("\t", $_, $month{$_}) } sort keys %month), "\n";
 download(@source);
 
 my ($article_ids, $gene_ids, $tax_ids) = do_gene2pubmed();
